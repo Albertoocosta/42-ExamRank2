@@ -1,32 +1,31 @@
-#include "sort_list.h"
-#include <stdlib.h>
+#include <stdio.h>
 
-t_list	*sort_list(t_list *lst, int (*cmp)(int, int))
+typedef struct s_list t_list;
+
+struct s_list
 {
-	int	temp;
-	t_list *curr = lst;
-	t_list *last_sort = NULL;
-	int swapped = 0;
+	int     data;
+	t_list  *next;
+};
 
-	while(1)
+t_list *sort_list(t_list *lst, int (*cmp)(int, int))
+{
+	t_list *start;
+	int temp;
+
+	start = lst;
+
+	while(lst && lst->next)
 	{
-		swapped = 0;
-		curr = lst;
-		while (curr->next != last_sort)
+		if((*cmp)(lst->data, lst->next->data) == 0)
 		{
-			if ((*cmp)(curr->data, curr->next->data) == 0)
-			{
-				temp = curr->data;
-				curr->data = curr->next->data;
-				curr->next->data = temp;
-				curr = lst;
-			}
-			else
-				curr = curr->next;
+			temp = lst->data;
+			lst->data = lst->next->data;
+			lst->next->data = temp;
+			lst = start;
 		}
-		last_sort = curr;
-		if (!swapped)
-			break ;
+		else
+			lst= lst->next;
 	}
-	return (lst);
+	return (start);
 }
